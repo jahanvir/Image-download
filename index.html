@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LinkedIn Quote Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        #container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        #quote-container {
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #quote {
+            font-size: 24px;
+            font-weight: bold;
+            color: #000;
+        }
+
+        #author {
+            font-size: 20px;
+            color: #000;
+        }
+
+        #image-preview {
+            max-width: 100%;
+            height: auto;
+            margin-top: 20px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        #generate-button {
+            background-color: #0073e6;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+        }
+
+        #generate-button:hover {
+            background-color: #005bbf;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <h1>LinkedIn Quote Generator</h1>
+        <div id="quote-container">
+            <input type="text" id="quote-input" placeholder="Enter the quote">
+            <input type="text" id="author-input" placeholder="Enter the author">
+            <input type="text" id="background-input" placeholder="Enter background image URL">
+            <input type="text" id="font-color-input" placeholder="Enter font color (e.g., #000000)">
+            <button id="generate-button">Generate Image</button>
+            <div id="quote-preview">
+                <img id="image-preview" src="" alt="Generated Image">
+                <a id="download-link" href="#" download="linkedin_post.png">Download Image</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('generate-button').addEventListener('click', function () {
+            const quote = document.getElementById('quote-input').value;
+            const author = document.getElementById('author-input').value;
+            const backgroundImageUrl = document.getElementById('background-input').value;
+            const fontColor = document.getElementById('font-color-input').value;
+
+            const canvas = document.createElement('canvas');
+            canvas.width = 1200;
+            canvas.height = 630;
+            const context = canvas.getContext('2d');
+
+            const background = new Image();
+            background.src = backgroundImageUrl;
+            background.crossOrigin = 'Anonymous';
+
+            background.onload = function () {
+                // Draw the background image
+                context.drawImage(background, 0, 0, canvas.width, canvas.height);
+
+                // Apply font color
+                context.fillStyle = fontColor;
+
+                // Customize text position and font size as needed
+                context.font = 'bold 36px Arial';
+                context.textAlign = 'center';
+
+                // Draw the quote
+                context.fillText(quote, canvas.width / 2, 300);
+
+                // Customize text for author
+                context.font = '24px Arial';
+                context.fillText(`- ${author}`, canvas.width / 2, 400);
+
+                // Convert canvas to a data URL for download
+                const imageDataURL = canvas.toDataURL('image/png');
+                document.getElementById('image-preview').src = imageDataURL;
+                document.getElementById('download-link').href = imageDataURL;
+                document.getElementById('download-link').style.display = 'block';
+            };
+        });
+    </script>
+</body>
+</html>
